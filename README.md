@@ -1,84 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🧠 SocialCardGen — Dynamic Social Card Generator with Cloudinary
 
-First, run the development server:
+> Create beautiful, real-time Open Graph images for your blog posts, articles, product pages, or marketing campaigns using customizable templates and overlays powered by Cloudinary.
+
+![SocialCardGen Preview](./preview.png)
+
+---
+
+## 🚀 What This App Does
+
+- **📤 Upload or Fetch**  
+  Upload images via Cloudinary or extract OG image and metadata from any URL.
+
+- **🎨 Customize in Real-Time**  
+  Choose from prebuilt templates, edit title/subtitle text, and apply live overlays.
+
+- **📸 Preview & Export**  
+  Generate final preview using Cloudinary transformations, then export as PNG or share the dynamic URL.
+
+---
+
+## ✨ Features
+
+- 🧠 Smart OG metadata extraction
+- 🔧 Cloudinary-powered image manipulation
+- 🎯 Live template preview with overlays
+- 💅 Responsive UI with Tailwind CSS 4
+- ⚡ Built with Next.js 15 (App Router), Motion.dev, shadcn/ui
+- ✅ Works great for blogs, CMSs, and link previews
+
+---
+
+## 🛠 Tech Stack
+
+| Tech          | Description                          |
+|---------------|--------------------------------------|
+| Next.js 15    | App Router, client/server components |
+| Tailwind CSS 4| Modern styling utility               |
+| Cloudinary    | Image hosting & transformation       |
+| shadcn/ui     | Accessible UI components             |
+| Motion.dev    | Smooth transitions & animations      |
+
+---
+
+## ✅ Prerequisites
+
+- Node.js 18+
+- Cloudinary account (free tier is enough)
+
+---
+
+## 🔐 .env Configuration
+
+Create a `.env.local` file in your root directory:
+
+```env
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your-cloud-name
+NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=your-upload-preset
+NEXT_PUBLIC_CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+````
+
+> ✅ Only the `NEXT_PUBLIC_` keys will be exposed to the frontend.
+
+---
+
+## 🧪 Getting Started
+
+### 1. Clone & Install
+
+```bash
+git clone https://github.com/yourname/socialcardgen.git
+cd socialcardgen
+npm install
+```
+
+### 2. Start Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# visit http://localhost:3000/generator
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📜 Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-
-
-
-
-
-
-
-Here are a few example **titles and subtitles** you can use to test your social card generator, suitable for tech/blog/media use cases:
+| Script          | Description              |
+| --------------- | ------------------------ |
+| `npm run dev`   | Start development server |
+| `npm run build` | Build for production     |
+| `npm run lint`  | Run TypeScript + ESLint  |
+| `npm run start` | Start production server  |
 
 ---
 
-### 📝 **Sample Set 1 – Blog Post**
+## 📂 Project Structure
 
-* **Title**: “The Future of Serverless Architecture”
-* **Subtitle**: “How edge functions are reshaping cloud development”
-
----
-
-### 🧠 **Sample Set 2 – AI Article**
-
-* **Title**: “AI Tools You Should Be Using in 2025”
-* **Subtitle**: “Boost your productivity with the latest generative AI apps”
+```
+src/
+  app/generator/       → Main 3-step wizard UI
+  components/          → Modular UI blocks (upload, preview, etc)
+  lib/templates.ts     → Template metadata
+  styles/              → Global Tailwind styles
+```
 
 ---
 
-### 🌐 **Sample Set 3 – Web Dev Resource**
+## 🌍 Deployment (Vercel Recommended)
 
-* **Title**: “Mastering Next.js 15”
-* **Subtitle**: “From layouts to streaming with App Router best practices”
-
----
-
-### 📸 **Sample Set 4 – Product Launch**
-
-* **Title**: “Introducing SnapKit Pro”
-* **Subtitle**: “Edit. Brand. Share. Beautiful thumbnails in seconds.”
+1. Push your project to GitHub
+2. Go to [vercel.com](https://vercel.com), click **Import Project**
+3. Link your repo and set up `.env` variables
+4. Click **Deploy** 🎉
 
 ---
 
-### 🎨 **Sample Set 5 – Design Tips**
+## 🧠 Helpful Links
 
-* **Title**: “5 Design Patterns That Just Work”
-* **Subtitle**: “Practical UX/UI advice from real-world projects”
+* 📘 [Cloudinary Official Docs](https://cloudinary.com/documentation)
+* 🎨 [next-cloudinary Image Overlay Docs](https://next.cloudinary.dev/cldogimage/overlays)
+* ⚛️ [Next.js App Router Docs](https://nextjs.org/docs/app)
+* 🧰 [shadcn/ui Components](https://ui.shadcn.com/)
+* 🎬 [Motion.dev Docs](https://motion.dev)
 
 ---
 
-Would you like these saved as presets or passed as a default preview in the app?
+## 📄 License
+
+MIT — see [LICENSE](./LICENSE)
+
+---
+
+**Craft beautiful, shareable OG images — without design tools. 🚀**
+
