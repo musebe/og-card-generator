@@ -1,26 +1,33 @@
 // src/components/AssetStep.tsx
+
 'use client';
 
 import { FC } from 'react';
 import { motion } from 'motion/react';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { UploadWidget, UploadInfo } from '@/components/UploadWidget';
 import FetchWidget, { OgInfo } from '@/components/FetchWidget';
-import { Button } from '@/components/ui/button';
 
 export interface AssetStepProps {
-  /** The currently selected image URL (upload or OG) */
+  /** Currently selected image URL (upload or OG fallback) */
   imageUrl?: string;
-  /** Called when the user uploads via Cloudinary */
+  /** Called on successful Cloudinary upload */
   onUpload(info: UploadInfo): void;
-  /** Called when the user fetches OG metadata */
+  /** Called on successful OG fetch */
   onFetch(info: OgInfo): void;
-  /** Move to the next step */
+  /** Advance to Design step */
   onNext(): void;
-  /** Disable “Next” until an asset is chosen */
+  /** Disable “Next” until asset is chosen */
   disabledNext: boolean;
 }
 
+/**
+ * Step 1: asset selection
+ * - UploadWidget => Cloudinary
+ * - FetchWidget  => OG metadata
+ * - Preview image
+ */
 export const AssetStep: FC<AssetStepProps> = ({
   imageUrl,
   onUpload,
@@ -40,14 +47,13 @@ export const AssetStep: FC<AssetStepProps> = ({
       <h2 className='text-xl font-semibold'>1. Asset Selection</h2>
 
       <div className='flex items-center gap-4'>
-        {/* Upload via Cloudinary widget */}
+        {/* Upload via Cloudinary */}
         <UploadWidget onUpload={onUpload} />
 
-        {/* Fetch via URL with toasts & error handling (inline mode) */}
+        {/* Fetch OG metadata by URL */}
         <FetchWidget onFetch={onFetch} inline />
       </div>
 
-      {/* Live preview of the chosen asset */}
       {imageUrl && (
         <img
           src={imageUrl}

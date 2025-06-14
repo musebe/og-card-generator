@@ -34,3 +34,51 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+
+
+
+
+Here are a few example **titles and subtitles** you can use to test your social card generator, suitable for tech/blog/media use cases:
+
+---
+
+### 📝 **Sample Set 1 – Blog Post**
+
+* **Title**: “The Future of Serverless Architecture”
+* **Subtitle**: “How edge functions are reshaping cloud development”
+
+---
+
+### 🧠 **Sample Set 2 – AI Article**
+
+* **Title**: “AI Tools You Should Be Using in 2025”
+* **Subtitle**: “Boost your productivity with the latest generative AI apps”
+
+---
+
+### 🌐 **Sample Set 3 – Web Dev Resource**
+
+* **Title**: “Mastering Next.js 15”
+* **Subtitle**: “From layouts to streaming with App Router best practices”
+
+---
+
+### 📸 **Sample Set 4 – Product Launch**
+
+* **Title**: “Introducing SnapKit Pro”
+* **Subtitle**: “Edit. Brand. Share. Beautiful thumbnails in seconds.”
+
+---
+
+### 🎨 **Sample Set 5 – Design Tips**
+
+* **Title**: “5 Design Patterns That Just Work”
+* **Subtitle**: “Practical UX/UI advice from real-world projects”
+
+---
+
+Would you like these saved as presets or passed as a default preview in the app?

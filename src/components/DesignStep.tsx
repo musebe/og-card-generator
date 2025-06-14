@@ -1,21 +1,15 @@
 // src/components/DesignStep.tsx
+
 'use client';
 
 import { FC } from 'react';
 import { motion } from 'motion/react';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import TemplateSelector from '@/components/TemplateSelector';
 import FieldInputs from '@/components/FieldInputs';
 import OverlayControls from '@/components/OverlayControls';
 import CardPreview from '@/components/CardPreview';
-import { Button } from '@/components/ui/button';
-import {
-  Collapsible,
-  CollapsibleTrigger,
-  CollapsibleContent,
-} from '@/components/ui/collapsible';
-import { UploadInfo } from '@/components/UploadWidget';
-import { OgInfo } from '@/components/FetchWidget';
 
 export interface DesignStepProps {
   templateId: string;
@@ -27,6 +21,13 @@ export interface DesignStepProps {
   onNext(): void;
 }
 
+/**
+ * Step 2: design configuration
+ * - TemplateSelector
+ * - FieldInputs
+ * - OverlayControls (collapsible)
+ * - Live preview
+ */
 export const DesignStep: FC<DesignStepProps> = ({
   templateId,
   fields,
@@ -46,8 +47,8 @@ export const DesignStep: FC<DesignStepProps> = ({
   >
     <h2 className='text-xl font-semibold'>2. Design</h2>
 
-    <div className='grid lg:grid-cols-2 gap-8'>
-      {/* Left: Configuration controls */}
+    <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+      {/* Left: Controls */}
       <Card className='p-6 space-y-6'>
         <TemplateSelector selected={templateId} onChange={onTemplateChange} />
 
@@ -57,18 +58,11 @@ export const DesignStep: FC<DesignStepProps> = ({
           onChange={onFieldsChange}
         />
 
-        <Collapsible>
-          <CollapsibleTrigger asChild>
-            <Button variant='outline'>Overlay Controls ⚙️</Button>
-          </CollapsibleTrigger>
-          <CollapsibleContent className='mt-4'>
-            <OverlayControls />
-          </CollapsibleContent>
-        </Collapsible>
+        <OverlayControls />
       </Card>
 
       {/* Right: Live preview */}
-      <div className='flex items-center justify-center'>
+      <Card className='p-4 flex items-center justify-center'>
         <motion.div
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
@@ -85,7 +79,7 @@ export const DesignStep: FC<DesignStepProps> = ({
             }}
           />
         </motion.div>
-      </div>
+      </Card>
     </div>
 
     <div className='flex justify-between'>

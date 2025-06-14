@@ -13,29 +13,36 @@ import { PreviewStep } from '@/components/PreviewStep';
 
 type Step = 'asset' | 'design' | 'preview';
 
+/**
+ * GeneratorPage orchestrates the 3‐step wizard:
+ * 1️⃣ AssetStep  → upload or fetch image
+ * 2️⃣ DesignStep → pick template & live preview
+ * 3️⃣ PreviewStep→ final preview + download/copy
+ */
 export default function GeneratorPage() {
-  // 1️⃣ Read initial template from URL
+  // 1️⃣ Read initial `?template=` from URL
   const params = useSearchParams();
   const initialTemplate = (params.get('template') as string) || 'basic';
 
-  // 2️⃣ Local state
+  // 2️⃣ Page‐level state
   const [step, setStep] = useState<Step>('asset');
-  const [templateId, setTemplateId] = useState<string>(initialTemplate);
+  const [templateId, setTemplateId] = useState(initialTemplate);
   const [uploadedInfo, setUploadedInfo] = useState<UploadInfo | null>(null);
   const [ogData, setOgData] = useState<OgInfo>({});
   const [fields, setFields] = useState({ title: '', subtitle: '' });
 
-  // 3️⃣ Sync URL param when template changes
+  // 3️⃣ Keep `?template` param in sync with state
   useEffect(() => {
     const u = new URL(window.location.href);
     u.searchParams.set('template', templateId);
     window.history.replaceState(null, '', u);
   }, [templateId]);
 
-  // 4️⃣ Use uploaded image or OG fallback
-  const imageUrl = uploadedInfo?.url || ogData.image;
+  // 4️⃣ Compute a single image URL for both Design & Preview
+  //    (favor upload, then OG, else empty string)
+  const imageUrl = uploadedInfo?.url || ogData.image || '';
 
-  // 5️⃣ When OG data arrives, seed our text fields
+  // 5️⃣ Seed title/subtitle when OG data arrives
   useEffect(() => {
     setFields({
       title: ogData.title || '',
@@ -44,9 +51,9 @@ export default function GeneratorPage() {
   }, [ogData]);
 
   return (
-    <div className='container mx-auto px-4 py-12'>
+    <div className='container mx-auto max-w-screen-lg px-4 py-8 overflow-y-auto'>
       <AnimatePresence mode='wait'>
-        {/* Asset Step */}
+        {/* STEP 1: Asset Selection */}
         {step === 'asset' && (
           <AssetStep
             imageUrl={imageUrl}
@@ -57,7 +64,7 @@ export default function GeneratorPage() {
           />
         )}
 
-        {/* Design Step */}
+        {/* STEP 2: Design */}
         {step === 'design' && (
           <DesignStep
             templateId={templateId}
@@ -70,7 +77,7 @@ export default function GeneratorPage() {
           />
         )}
 
-        {/* Preview Step */}
+        {/* STEP 3: Preview & Export */}
         {step === 'preview' && (
           <PreviewStep
             templateId={templateId}
