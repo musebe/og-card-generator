@@ -1,11 +1,8 @@
 // src/app/generator/page.tsx
-'use client'; // page now runs entirely on the client
-export const dynamic = 'force-dynamic'; // skip prerender at build time
+'use client';                       // page runs on the browser
+export const dynamic = 'force-dynamic'; // ⬅️ skip prerender during build
 
-/**
- * 🏁 **GeneratorPage** – thin wrapper that renders the client-only wizard.
- * Rendered dynamically to satisfy Next.js CSR-bailout rules.
- */
+
 
 import GeneratorClient from '@/components/GeneratorClient';
 

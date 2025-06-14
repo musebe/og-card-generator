@@ -14,14 +14,10 @@ import { PreviewStep } from '@/components/PreviewStep';
 type Step = 'asset' | 'design' | 'preview';
 
 /**
- * 🎛️ **GeneratorClient** – 3-step client-only wizard
- *
- * 1️⃣ **AssetStep**   – upload or fetch an image
- * 2️⃣ **DesignStep**  – choose template & live preview
- * 3️⃣ **PreviewStep** – export PNG or copy OG URL
+ * 🎛️ **GeneratorClient** – 3-step wizard (runs only in the browser)
  */
 export default function GeneratorClient() {
-  /* 1️⃣ read `?template=` from URL */
+  /* 1️⃣ read ?template= from URL (safe on client) */
   const params = useSearchParams();
   const initialTemplate = (params.get('template') as string) || 'basic';
 
@@ -32,17 +28,17 @@ export default function GeneratorClient() {
   const [ogData, setOgData] = useState<OgInfo>({});
   const [fields, setFields] = useState({ title: '', subtitle: '' });
 
-  /* 3️⃣ keep `?template` param synced */
+  /* 3️⃣ sync ?template param */
   useEffect(() => {
     const u = new URL(window.location.href);
     u.searchParams.set('template', templateId);
     window.history.replaceState(null, '', u);
   }, [templateId]);
 
-  /* 4️⃣ derive image URL (upload ➜ OG ➜ '') */
+  /* 4️⃣ single image src */
   const imageUrl = uploadedInfo?.url || ogData.image || '';
 
-  /* 5️⃣ seed title/subtitle when OG metadata arrives */
+  /* 5️⃣ seed title/subtitle when OG data arrives */
   useEffect(() => {
     setFields({
       title: ogData.title || '',
@@ -50,7 +46,7 @@ export default function GeneratorClient() {
     });
   }, [ogData]);
 
-  /* 6️⃣ render step component */
+  /* 6️⃣ render step */
   return (
     <div className='container mx-auto max-w-screen-lg px-4 py-8 overflow-y-auto'>
       <AnimatePresence mode='wait'>
@@ -63,7 +59,6 @@ export default function GeneratorClient() {
             disabledNext={!imageUrl}
           />
         )}
-
         {step === 'design' && (
           <DesignStep
             templateId={templateId}
@@ -75,7 +70,6 @@ export default function GeneratorClient() {
             onNext={() => setStep('preview')}
           />
         )}
-
         {step === 'preview' && (
           <PreviewStep
             templateId={templateId}
