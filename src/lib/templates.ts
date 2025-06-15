@@ -23,23 +23,48 @@ export type Template = {
 
 export type TemplateId = 'article' | 'full' | 'one-third';
 
-// ✅ Using the exact Public IDs you provided
+// Using the exact Public IDs you provided
 const logoId = 'hackit_africa/social_cards/logo';
 const galaxyBgId = 'hackit_africa/social_cards/galaxy';
 const mountainBgId = 'hackit_africa/social_cards/mountain';
 const dogImageId = 'hackit_africa/social_cards/dog';
 
+
+// --- URL Generation with Logging ---
+
+const articlePreviewUrl = articleOgUrl({
+    publicId: galaxyBgId,
+    headline: 'Title Here',
+    tagline: 'Next Cloudinary',
+    logoPublicId: logoId
+});
+// ✅ LOGGING: See the URL for the "Article" template card
+console.log("LEFT SIDE (Article Card URL):", articlePreviewUrl);
+
+
+const fullPreviewUrl = fullOgUrl({
+    publicId: dogImageId,
+    headline: 'Title Here',
+    body: 'Subtitle Here'
+});
+// ✅ LOGGING: See the URL for the "Full" template card
+console.log("LEFT SIDE (Full Card URL):", fullPreviewUrl);
+
+
+const oneThirdPreviewUrl = oneThirdOgUrl({
+    publicId: mountainBgId,
+    headline: 'Title Here',
+    body: 'Subtitle Here'
+});
+// ✅ LOGGING: See the URL for the "One Third" template card
+console.log("LEFT SIDE (One Third Card URL):", oneThirdPreviewUrl);
+
+
 const templates: Template[] = [
     {
         id: 'article',
         name: 'Article',
-        previewUrl: articleOgUrl({
-            publicId: galaxyBgId,
-            headline: 'Title Here',
-            tagline: 'Next Cloudinary',
-            logoPublicId: logoId
-        }),
-        // ✅ FIX: Added the full default configuration
+        previewUrl: articlePreviewUrl,
         defaultConfig: {
             width: 1200,
             height: 630,
@@ -55,12 +80,7 @@ const templates: Template[] = [
     {
         id: 'full',
         name: 'Full',
-        previewUrl: fullOgUrl({
-            publicId: dogImageId,
-            headline: 'Title Here',
-            body: 'Subtitle Here'
-        }),
-        // ✅ FIX: Added the full default configuration
+        previewUrl: fullPreviewUrl,
         defaultConfig: {
             width: 1200,
             height: 630,
@@ -74,12 +94,7 @@ const templates: Template[] = [
     {
         id: 'one-third',
         name: 'One Third',
-        previewUrl: oneThirdOgUrl({
-            publicId: mountainBgId,
-            headline: 'Title Here',
-            body: 'Subtitle Here'
-        }),
-        // ✅ FIX: Added the full default configuration
+        previewUrl: oneThirdPreviewUrl,
         defaultConfig: {
             width: 1200,
             height: 630,

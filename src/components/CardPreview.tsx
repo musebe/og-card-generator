@@ -50,25 +50,31 @@ const CardPreview: FC<CardPreviewProps> = ({ templateId, config }) => {
       const headline = config.text?.title || 'Your Headline Here';
       const body = config.text?.subtitle || 'Your subtitle or body text here';
 
-      // ✅ This switch statement now calls your new template functions
+      let generatedUrl = '';
       switch (templateId) {
         case 'full':
-          return fullOgUrl({ publicId, headline, body });
-
+          generatedUrl = fullOgUrl({ publicId, headline, body });
+          break;
         case 'one-third':
-          return oneThirdOgUrl({ publicId, headline, body });
-
+          generatedUrl = oneThirdOgUrl({ publicId, headline, body });
+          break;
         case 'article':
         default:
-          // The logo public ID can be hardcoded or come from an env variable
-          const logoPublicId = 'images/cloudinary-logo-white';
-          return articleOgUrl({
+          // Using the correct logo ID here as well
+          const logoPublicId = 'hackit_africa/social_cards/logo';
+          generatedUrl = articleOgUrl({
             publicId,
             headline,
             tagline: body,
             logoPublicId,
           });
+          break;
       }
+
+      // ✅ LOGGING: See the URL for the live preview on the right
+      console.log(`RIGHT SIDE (Live Preview for ${templateId}):`, generatedUrl);
+
+      return generatedUrl;
     } catch (err) {
       console.error('OG URL generation failed:', err);
       setErrored(true);
