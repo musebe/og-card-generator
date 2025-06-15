@@ -1,3 +1,4 @@
+// src/components/DesignStep.tsx
 'use client';
 
 import { FC } from 'react';
@@ -21,11 +22,10 @@ export interface DesignStepProps {
   onFieldsChange(fields: { title: string; subtitle: string }): void;
   onBack(): void;
   onNext(): void;
+  // ✅ FIX: Add the new prop to pass the callback function.
+  onUrlGenerated(url: string): void;
 }
 
-/**
- * Step 2: design configuration
- */
 const DesignStep: FC<DesignStepProps> = ({
   templateId,
   uploadInfo,
@@ -34,6 +34,7 @@ const DesignStep: FC<DesignStepProps> = ({
   onFieldsChange,
   onBack,
   onNext,
+  onUrlGenerated, // ✅ FIX: Receive the new prop.
 }) => {
   const imagePublicId = uploadInfo?.publicId ?? '';
 
@@ -51,13 +52,11 @@ const DesignStep: FC<DesignStepProps> = ({
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
         <Card className='p-6 space-y-6'>
           <TemplateSelector selected={templateId} onChange={onTemplateChange} />
-
           <FieldInputs
             title={fields.title}
             subtitle={fields.subtitle}
             onChange={onFieldsChange}
           />
-
           <OverlayControls />
         </Card>
 
@@ -73,6 +72,8 @@ const DesignStep: FC<DesignStepProps> = ({
                 image: imagePublicId,
                 text: { title: fields.title, subtitle: fields.subtitle },
               }}
+              // ✅ FIX: Pass the function down to CardPreview.
+              onUrlGenerated={onUrlGenerated}
             />
           </motion.div>
         </Card>
@@ -80,7 +81,8 @@ const DesignStep: FC<DesignStepProps> = ({
 
       <div className='flex justify-between'>
         <Button variant='outline' onClick={onBack}>
-          ← Back
+          {' '}
+          ← Back{' '}
         </Button>
         <Button onClick={onNext}>Next: Preview →</Button>
       </div>
