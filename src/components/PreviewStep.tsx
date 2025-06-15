@@ -25,25 +25,20 @@ export const PreviewStep: FC<PreviewStepProps> = ({
   onBack,
   finalImageUrl,
 }) => {
-  const { title } = fields;
+  const { title, subtitle } = fields;
   const displayUrl = finalImageUrl || fallbackUrl;
 
-  // ✅ FIX: The logic for the Download button is now complete.
   const handleDownload = async () => {
     if (!displayUrl) return;
     try {
-      // We fetch the image from the final URL
       const response = await fetch(displayUrl);
       const blob = await response.blob();
-
-      // Create a temporary link to trigger the browser download
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
       link.download = 'social-card.png';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
       toast.success('Download started!');
     } catch (error) {
       console.error('Download failed:', error);
@@ -53,7 +48,6 @@ export const PreviewStep: FC<PreviewStepProps> = ({
     }
   };
 
-  // ✅ FIX: The logic for the Copy URL button is now complete.
   const handleCopy = async () => {
     if (!displayUrl) return;
     try {
@@ -62,6 +56,46 @@ export const PreviewStep: FC<PreviewStepProps> = ({
     } catch (error) {
       console.error('Copy failed:', error);
       toast.error('Copy failed.');
+    }
+  };
+
+  // ✅ This is the final, corrected save function.
+  const handleSave = async () => {
+    if (!displayUrl) {
+      toast.error('Cannot save an empty image URL.');
+      return;
+    }
+
+    // 1. Capture the ID when the loading toast is created
+    const toastId = toast.loading('Saving template...');
+
+    const cardToSave = {
+      url: displayUrl,
+      headline: title,
+      tagline: subtitle,
+    };
+
+    try {
+      const response = await fetch('/api/templates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cardToSave),
+      });
+
+      if (!response.ok) {
+        throw new Error('Server responded with an error');
+      }
+
+      // 2. Use the ID to update the toast to a "Success" message
+      toast.success('Template saved successfully!', {
+        id: toastId,
+      });
+    } catch (error) {
+      // 3. Use the ID to update the toast to an "Error" message
+      toast.error('Failed to save template.', {
+        id: toastId,
+      });
+      console.error('Save failed:', error);
     }
   };
 
@@ -76,7 +110,6 @@ export const PreviewStep: FC<PreviewStepProps> = ({
         <h2 className='text-xl font-semibold'>3. Preview & Export</h2>
         <p className='text-gray-400 mt-1'>Your final social card is ready.</p>
       </div>
-
       <div className='max-w-2xl mx-auto'>
         <Card className='p-2 sm:p-4 shadow-lg overflow-hidden bg-gray-800/50'>
           {displayUrl ? (
@@ -92,8 +125,10 @@ export const PreviewStep: FC<PreviewStepProps> = ({
           )}
         </Card>
       </div>
-
       <div className='flex flex-col sm:flex-row items-center justify-center gap-4'>
+        <Button size='lg' onClick={handleSave} disabled={!displayUrl}>
+          Save Template
+        </Button>
         <Button size='lg' onClick={handleDownload} disabled={!displayUrl}>
           Download PNG
         </Button>
@@ -106,7 +141,6 @@ export const PreviewStep: FC<PreviewStepProps> = ({
           Copy URL
         </Button>
       </div>
-
       <div className='text-center'>
         <Button variant='ghost' onClick={onBack}>
           ← Back to Design
