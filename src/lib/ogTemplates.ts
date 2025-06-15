@@ -82,35 +82,72 @@ export function fullOgUrl(opts: {
     });
 }
 
-/* ==========  3. One Third Template (Working Version) ================ */
+/* ==========  3. One Third Template (Final Polished Layout) ======== */
 export function oneThirdOgUrl(opts: {
     publicId: string;
     headline: string;
     body: string;
 }) {
     return getCldOgImageUrl({
+        // Base is the user's image, tinted white for the text background
         src: opts.publicId,
-        ...SIZE,
+        width: 1200,
+        height: 630,
         effects: [{ colorize: '100,co_white' }],
         overlays: [
+            // 1. Image on the RIGHT 65% (This part is correct)
             {
                 publicId: opts.publicId,
-                position: { gravity: 'north_east' },
-                effects: [{ crop: 'fill', gravity: 'auto', width: '0.33', height: '1.0' }],
+                position: { gravity: 'east' },
+                effects: [
+                    {
+                        crop: 'fill',
+                        gravity: 'auto',
+                        width: '0.65',
+                        height: '1.0'
+                    }
+                ],
                 flags: ['relative'],
             },
+            // 2. The headline, with final font size and spacing
             {
-                width: 625,
+                width: 380, // Text area width in the 35% space
                 crop: 'fit',
-                text: { color: 'black', fontFamily: 'Source Sans Pro', fontSize: 80, fontWeight: 'bold', text: opts.headline },
-                position: { x: 125, y: -50, gravity: 'west' },
+                text: {
+                    color: 'black',
+                    fontFamily: 'Source Sans Pro',
+                    // ✅ FIX: Increased font size for visibility
+                    fontSize: 50,
+                    fontWeight: 'bold',
+                    lineSpacing: -10,
+                    text: opts.headline
+                },
+                position: {
+                    gravity: 'west', // Anchored to the vertical center of the left edge
+                    x: 40,
+                    // ✅ FIX: Adjusted Y position for better spacing
+                    y: -60,
+                },
             },
+            // 3. The body text, with final font size and spacing
             {
-                width: 625,
+                width: 380,
                 crop: 'fit',
-                text: { color: 'black', fontFamily: 'Source Sans Pro', fontSize: 37, text: opts.body },
-                position: { x: 125, y: 50, gravity: 'west' },
+                text: {
+                    color: 'rgb:6b7280', // Dark grey
+                    fontFamily: 'Source Sans Pro',
+                    // ✅ FIX: Increased font size for readability
+                    fontSize: 29,
+                    lineSpacing: 5,
+                    text: opts.body
+                },
+                position: {
+                    gravity: 'west',
+                    x: 40,
+                    // ✅ FIX: Adjusted Y position for better spacing
+                    y: 80,
+                },
             },
         ],
     });
-   }
+}
