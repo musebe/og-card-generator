@@ -1,24 +1,27 @@
-// src/lib/templates.ts
-
 export type Template = {
-    id: string
-    name: string
-    previewUrl: string
+    id: 'basic' | 'split' | 'badge';
+    name: string;
+    previewUrl: string;
     defaultConfig: {
-        width: number
-        height: number
+        width: number;
+        height: number;
         textPositions: {
-            title: { gravity: string; x: number; y: number }
-            subtitle: { gravity: string; x: number; y: number }
-        }
+            title: { gravity: string; x: number; y: number };
+            subtitle: { gravity: string; x: number; y: number };
+        };
         badgePositions?: Array<{
-            name: string
-            gravity: string
-            x: number
-            y: number
-        }>
-    }
-}
+            name: string;
+            gravity: string;
+            x: number;
+            y: number;
+        }>;
+    };
+};
+
+/**
+ * Union of all valid template IDs.
+ */
+export type TemplateId = Template['id'];
 
 const templates: Template[] = [
     {
@@ -29,25 +32,10 @@ const templates: Template[] = [
             width: 1200,
             height: 630,
             textPositions: {
-                title: {
-                    gravity: 'north',
-                    x: 0,
-                    y: 120,
-                },
-                subtitle: {
-                    gravity: 'north',
-                    x: 0,
-                    y: 200,
-                },
+                title: { gravity: 'north', x: 0, y: 120 },
+                subtitle: { gravity: 'north', x: 0, y: 200 },
             },
-            badgePositions: [
-                {
-                    name: 'promo',
-                    gravity: 'south_west',
-                    x: 50,
-                    y: 50,
-                },
-            ],
+            badgePositions: [{ name: 'promo', gravity: 'south_west', x: 50, y: 50 }],
         },
     },
     {
@@ -58,18 +46,9 @@ const templates: Template[] = [
             width: 1200,
             height: 630,
             textPositions: {
-                title: {
-                    gravity: 'north_east',
-                    x: -50,
-                    y: 120,
-                },
-                subtitle: {
-                    gravity: 'north_east',
-                    x: -50,
-                    y: 200,
-                },
+                title: { gravity: 'north_east', x: -50, y: 120 },
+                subtitle: { gravity: 'north_east', x: -50, y: 200 },
             },
-            // no default badge on this template
         },
     },
     {
@@ -80,28 +59,13 @@ const templates: Template[] = [
             width: 1200,
             height: 630,
             textPositions: {
-                title: {
-                    gravity: 'west',
-                    x: 50,
-                    y: 120,
-                },
-                subtitle: {
-                    gravity: 'west',
-                    x: 50,
-                    y: 200,
-                },
+                title: { gravity: 'west', x: 50, y: 120 },
+                subtitle: { gravity: 'west', x: 50, y: 200 },
             },
-            badgePositions: [
-                {
-                    name: 'promo',
-                    gravity: 'north_east',
-                    x: 50,
-                    y: 50,
-                },
-            ],
+            badgePositions: [{ name: 'promo', gravity: 'north_east', x: 50, y: 50 }],
         },
     },
-]
+];
 
-export default templates
+export default templates;
   

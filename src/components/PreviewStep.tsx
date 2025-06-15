@@ -1,69 +1,109 @@
 // src/components/PreviewStep.tsx
 'use client';
 
-import { FC, useEffect, useState } from 'react';
+import { FC, useMemo } from 'react';
 import { motion } from 'motion/react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import CardPreview from '@/components/CardPreview';
+import { CldImage } from 'next-cloudinary';
+import { toast } from 'sonner';
+
+import { basicOgUrl, splitOgUrl, badgeOgUrl } from '@/lib/ogTemplates';
+import type { UploadInfo } from '@/components/UploadWidget';
+import type { TemplateId } from '@/lib/templates';
 
 export interface PreviewStepProps {
-  /** ID of the selected template */
-  templateId: string;
-  /** User‐entered text fields */
-  text: { title: string; subtitle: string };
-  /** Either a full URL or Cloudinary public ID */
-  imageUrl?: string;
-  /** Called when user wants to go back to Design step */
+  /** Which template to use: 'basic' | 'split' | 'badge' */
+  templateId: TemplateId;
+  /** The finalized title & subtitle from step 2 */
+  fields: { title: string; subtitle: string };
+  /** Info about the uploaded image (Cloudinary publicId + URL + dims) */
+  uploadInfo: UploadInfo | null;
+  /** A fallback HTTP URL (e.g. OG‐fetched) if no publicId */
+  fallbackUrl?: string;
+  /** Go back to Design step */
   onBack(): void;
 }
 
 /**
- * Step 3: Render the final Preview + Export controls
+ * 🚀 **PreviewStep** – step 3 of the wizard
  *
- * - Uses **CardPreview** to generate the same live preview as in Design
- * - Builds a fully‐qualified URL (Cloudinary or passthrough)
- * - Download via blob + `<a download>`
- * - Copy URL to clipboard
+ * - Generates a final OG image URL via your `ogTemplates` helpers
+ * - Renders it with `<CldImage>`
+ * - Falls back to a normal `<img>` if only HTTP URL is available
+ * - Lets you Download or Copy the URL, with Sonner toasts
  */
 export const PreviewStep: FC<PreviewStepProps> = ({
   templateId,
-  text,
-  imageUrl,
+  fields,
+  uploadInfo,
+  fallbackUrl = '',
   onBack,
 }) => {
-  // derive final URL: if it's already a full URL, use it; else build Cloudinary URL
-  const finalUrl = imageUrl
-    ? /^https?:\/\//.test(imageUrl)
-      ? imageUrl
-      : `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${imageUrl}.png`
-    : '';
+  const { title, subtitle } = fields;
+  const publicId = uploadInfo?.publicId;
 
-  // Copy final URL to clipboard
-  const handleCopy = async () => {
-    if (!finalUrl) return;
-    try {
-      await navigator.clipboard.writeText(finalUrl);
-    } catch (err) {
-      console.error('Copy failed:', err);
+  // 1️⃣ Build the final OG URL if we have a publicId
+  const finalUrl = useMemo(() => {
+    if (!publicId) return '';
+    const opts = {
+      publicId,
+      headline: title,
+      tagline: subtitle,
+      body: subtitle, // for templates that expect `body`
+    };
+
+    switch (templateId) {
+      case 'split':
+        return splitOgUrl(opts);
+      case 'badge':
+        return badgeOgUrl(opts);
+      case 'basic':
+      default:
+        // basic needs a logoPublicId from env
+        const logoPublicId =
+          process.env.NEXT_PUBLIC_CLOUDINARY_LOGO_PUBLIC_ID || '';
+        return basicOgUrl({
+          publicId,
+          headline: title,
+          tagline: subtitle,
+          logoPublicId,
+        });
     }
-  };
+  }, [publicId, title, subtitle, templateId]);
 
-  // Download final image as PNG
+  // Use the generated URL if available, otherwise fallback to any HTTP URL
+  const displayUrl = finalUrl || fallbackUrl;
+  const isGenerated = Boolean(finalUrl);
+
+  // 2️⃣ Download as PNG
   const handleDownload = async () => {
-    if (!finalUrl) return;
+    if (!displayUrl) return;
     try {
-      const res = await fetch(finalUrl);
+      const res = await fetch(displayUrl);
       const blob = await res.blob();
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'social-card.png';
       a.click();
-    } catch (err) {
-      console.error('Download failed:', err);
+      toast.success('Downloaded!');
+    } catch {
+      toast.error('Download failed');
     }
   };
 
+  // 3️⃣ Copy to clipboard
+  const handleCopy = async () => {
+    if (!displayUrl) return;
+    try {
+      await navigator.clipboard.writeText(displayUrl);
+      toast.success('URL copied!');
+    } catch {
+      toast.error('Copy failed');
+    }
+  };
+
+  // 4️⃣ Render
   return (
     <motion.div
       key='preview'
@@ -73,36 +113,45 @@ export const PreviewStep: FC<PreviewStepProps> = ({
       transition={{ duration: 0.3 }}
       className='space-y-8'
     >
-      {/* Heading */}
       <h2 className='text-xl font-semibold'>3. Preview & Export</h2>
 
-      {/* Preview container */}
       <Card className='p-6'>
-        {finalUrl ? (
-          <CardPreview
-            templateId={templateId}
-            config={{ image: finalUrl, text }}
-          />
+        {displayUrl ? (
+          isGenerated ? (
+            <CldImage
+              src={displayUrl}
+              width={1200}
+              height={630}
+              alt={title || 'Preview'}
+              unoptimized
+              className='w-full h-auto object-cover'
+            />
+          ) : (
+            <img
+              src={displayUrl}
+              alt={title || 'Preview'}
+              className='w-full h-auto object-cover rounded-lg shadow'
+            />
+          )
         ) : (
-          /* Loading skeleton */
-          <div className='h-48 bg-gray-800 animate-pulse rounded-lg' />
+          <div className='h-48 bg-gray-200 animate-pulse rounded-lg' />
         )}
       </Card>
 
-      {/* Action buttons */}
       <div className='flex gap-4'>
-        <Button onClick={handleDownload} disabled={!finalUrl}>
+        <Button onClick={handleDownload} disabled={!displayUrl}>
           Download PNG
         </Button>
-        <Button variant='outline' onClick={handleCopy} disabled={!finalUrl}>
+        <Button variant='outline' onClick={handleCopy} disabled={!displayUrl}>
           Copy OG URL
         </Button>
       </div>
 
-      {/* Back link */}
       <Button variant='ghost' onClick={onBack}>
         ← Edit Design
       </Button>
     </motion.div>
   );
 };
+
+export default PreviewStep;

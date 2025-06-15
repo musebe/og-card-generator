@@ -5,6 +5,7 @@ import { CldUploadWidget } from 'next-cloudinary';
 import { Button } from '@/components/ui/button';
 import { UploadCloud } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export interface UploadInfo {
   publicId: string;
@@ -14,11 +15,21 @@ export interface UploadInfo {
 }
 
 interface UploadWidgetProps {
+  /** Called when an upload succeeds, receives the UploadInfo */
   onUpload(info: UploadInfo): void;
+  /** Disable the button while uploading or otherwise */
   disabled?: boolean;
+  /** Additional classname for the button wrapper */
   className?: string;
 }
 
+/**
+ * UploadWidget
+ *
+ * - Renders a Cloudinary upload button
+ * - Shows success/error toasts via Sonner
+ * - Returns secure_url + public_id + dimensions
+ */
 export function UploadWidget({
   onUpload,
   disabled = false,
@@ -26,23 +37,32 @@ export function UploadWidget({
 }: UploadWidgetProps) {
   return (
     <CldUploadWidget
+      // no `cloudName` prop here: read from NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
       uploadPreset={process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!}
       options={{
         folder: 'hackit_africa/social_cards',
+        sources: ['local', 'url', 'camera'],
+        multiple: false,
+        clientAllowedFormats: ['png', 'jpg', 'jpeg', 'webp'],
+        maxFileSize: 5_000_000,
+      }}
+      onError={(error) => {
+        console.error('Cloudinary upload error:', error);
+        toast.error('Upload failed. Please try again.');
       }}
       onSuccess={(res) => {
-        // guard both undefined and string-case
+        // Cloudinary may return a string or an object
         if (!res.info || typeof res.info === 'string') return;
-
-        const info = res.info;
-        const out: UploadInfo = {
-          publicId: info.public_id,
-          url: info.secure_url,
-          width: info.width,
-          height: info.height,
+        const { public_id, secure_url, width, height } = res.info;
+        const info: UploadInfo = {
+          publicId: public_id,
+          url: secure_url,
+          width,
+          height,
         };
-        console.log('✅ uploaded:', out);
-        onUpload(out);
+        console.log('✅ uploaded:', info);
+        toast.success('Image uploaded successfully!');
+        onUpload(info);
       }}
     >
       {({ open }) => (

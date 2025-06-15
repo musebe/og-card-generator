@@ -1,48 +1,52 @@
-// src/components/GeneratorClient.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { AnimatePresence } from 'motion/react';
-import { AssetStep } from '@/components/AssetStep';
-import { DesignStep } from '@/components/DesignStep';
-import { PreviewStep } from '@/components/PreviewStep';
 
-import { UploadInfo } from '@/components/UploadWidget';
-import { OgInfo } from '@/components/FetchWidget';
+import { AssetStep } from '@/components/AssetStep';
+import DesignStep from '@/components/DesignStep';
+import PreviewStep from '@/components/PreviewStep';
+
+import type { UploadInfo } from '@/components/UploadWidget';
+import type { OgInfo } from '@/components/FetchWidget';
+import templates, { TemplateId } from '@/lib/templates';
 
 type Step = 'asset' | 'design' | 'preview';
 
 /**
- * 🎛️ **GeneratorClient** – 3-step wizard (client-only)
- *
+ * 🎛️ **GeneratorClient** – 3-step wizard (client-only):
  * 1️⃣ AssetStep   – upload or fetch image
- * 2️⃣ DesignStep  – choose template & live preview
- * 3️⃣ PreviewStep – export PNG or copy OG URL
+ * 2️⃣ DesignStep  – pick template & live preview
+ * 3️⃣ PreviewStep – render final OG & export
  */
 export default function GeneratorClient() {
-  /* 1️⃣ read ?template= from URL */
   const params = useSearchParams();
-  const initialTemplate = (params.get('template') as string) || 'basic';
 
-  /* 2️⃣ local state */
+  // Safely derive a TemplateId from the query, defaulting to 'basic'
+  const raw = params.get('template');
+  const initialTemplate: TemplateId = templates.some((t) => t.id === raw)
+    ? (raw as TemplateId)
+    : 'basic';
+
   const [step, setStep] = useState<Step>('asset');
-  const [templateId, setTemplateId] = useState(initialTemplate);
+  const [templateId, setTemplateId] = useState<TemplateId>(initialTemplate);
   const [uploadedInfo, setUploadedInfo] = useState<UploadInfo | null>(null);
   const [ogData, setOgData] = useState<OgInfo>({});
   const [fields, setFields] = useState({ title: '', subtitle: '' });
 
-  /* 3️⃣ sync ?template param in the URL */
+  // Keep the `?template=` param in sync
   useEffect(() => {
     const u = new URL(window.location.href);
     u.searchParams.set('template', templateId);
     window.history.replaceState(null, '', u);
   }, [templateId]);
 
-  /* 4️⃣ derive a single image URL (upload ➜ OG ➜ '') */
-  const imageUrl = uploadedInfo?.url || ogData.image || '';
+  // publicId (for CldImage builders) & fallbackUrl (for previews)
+  const publicId = uploadedInfo?.publicId;
+  const fallbackUrl = uploadedInfo?.url || ogData.image || '';
 
-  /* 5️⃣ populate fields when OG meta arrives */
+  // Seed title/sub when OG metadata arrives
   useEffect(() => {
     setFields({
       title: ogData.title || '',
@@ -50,27 +54,26 @@ export default function GeneratorClient() {
     });
   }, [ogData]);
 
-  /* 6️⃣ render current wizard step */
   return (
     <div className='container mx-auto max-w-screen-lg px-4 py-8 overflow-y-auto'>
       <AnimatePresence mode='wait'>
         {step === 'asset' && (
           <AssetStep
-            imageUrl={imageUrl}
+            imageUrl={fallbackUrl}
             onUpload={setUploadedInfo}
             onFetch={setOgData}
             onNext={() => setStep('design')}
-            disabledNext={!imageUrl}
+            disabledNext={!fallbackUrl}
           />
         )}
 
         {step === 'design' && (
           <DesignStep
             templateId={templateId}
+            uploadInfo={uploadedInfo}
             fields={fields}
             onTemplateChange={setTemplateId}
             onFieldsChange={setFields}
-            imageUrl={imageUrl}
             onBack={() => setStep('asset')}
             onNext={() => setStep('preview')}
           />
@@ -79,8 +82,9 @@ export default function GeneratorClient() {
         {step === 'preview' && (
           <PreviewStep
             templateId={templateId}
-            text={fields}
-            imageUrl={imageUrl}
+            fields={fields}
+            uploadInfo={uploadedInfo}
+            fallbackUrl={fallbackUrl}
             onBack={() => setStep('design')}
           />
         )}
