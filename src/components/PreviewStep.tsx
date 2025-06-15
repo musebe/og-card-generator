@@ -8,12 +8,14 @@ import { Button } from '@/components/ui/button';
 import { CldImage } from 'next-cloudinary';
 import { toast } from 'sonner';
 
-import { basicOgUrl, splitOgUrl, badgeOgUrl } from '@/lib/ogTemplates';
+// ✅ FIX: Import the new template functions
+import { articleOgUrl, fullOgUrl, oneThirdOgUrl } from '@/lib/ogTemplates';
 import type { UploadInfo } from '@/components/UploadWidget';
 import type { TemplateId } from '@/lib/templates';
 
 export interface PreviewStepProps {
-  /** Which template to use: 'basic' | 'split' | 'badge' */
+  // ✅ FIX: Updated comment to reflect new template names
+  /** Which template to use: 'article' | 'full' | 'one-third' */
   templateId: TemplateId;
   /** The finalized title & subtitle from step 2 */
   fields: { title: string; subtitle: string };
@@ -27,11 +29,6 @@ export interface PreviewStepProps {
 
 /**
  * 🚀 **PreviewStep** – step 3 of the wizard
- *
- * - Generates a final OG image URL via your `ogTemplates` helpers
- * - Renders it with `<CldImage>`
- * - Falls back to a normal `<img>` if only HTTP URL is available
- * - Lets you Download or Copy the URL, with Sonner toasts
  */
 export const PreviewStep: FC<PreviewStepProps> = ({
   templateId,
@@ -43,40 +40,39 @@ export const PreviewStep: FC<PreviewStepProps> = ({
   const { title, subtitle } = fields;
   const publicId = uploadInfo?.publicId;
 
-  // 1️⃣ Build the final OG URL if we have a publicId
   const finalUrl = useMemo(() => {
     if (!publicId) return '';
+
+    // This object provides all the necessary data for any of the templates
     const opts = {
       publicId,
       headline: title,
-      tagline: subtitle,
-      body: subtitle, // for templates that expect `body`
+      body: subtitle,
+      tagline: subtitle, // for templates that expect 'tagline'
     };
 
+    // ✅ FIX: The switch statement now uses the new template IDs and calls the new functions
     switch (templateId) {
-      case 'split':
-        return splitOgUrl(opts);
-      case 'badge':
-        return badgeOgUrl(opts);
-      case 'basic':
+      case 'full':
+        return fullOgUrl(opts);
+      case 'one-third':
+        return oneThirdOgUrl(opts);
+      case 'article':
       default:
-        // basic needs a logoPublicId from env
+        // The 'article' template needs a logo, which we get from an env var or hardcode
         const logoPublicId =
-          process.env.NEXT_PUBLIC_CLOUDINARY_LOGO_PUBLIC_ID || '';
-        return basicOgUrl({
-          publicId,
-          headline: title,
-          tagline: subtitle,
+          process.env.NEXT_PUBLIC_CLOUDINARY_LOGO_PUBLIC_ID ||
+          'images/cloudinary-logo-white';
+        return articleOgUrl({
+          ...opts,
           logoPublicId,
         });
     }
   }, [publicId, title, subtitle, templateId]);
 
-  // Use the generated URL if available, otherwise fallback to any HTTP URL
   const displayUrl = finalUrl || fallbackUrl;
   const isGenerated = Boolean(finalUrl);
 
-  // 2️⃣ Download as PNG
   const handleDownload = async () => {
     if (!displayUrl) return;
     try {
@@ -92,7 +88,6 @@ export const PreviewStep: FC<PreviewStepProps> = ({
     }
   };
 
-  // 3️⃣ Copy to clipboard
   const handleCopy = async () => {
     if (!displayUrl) return;
     try {
@@ -103,7 +98,6 @@ export const PreviewStep: FC<PreviewStepProps> = ({
     }
   };
 
-  // 4️⃣ Render
   return (
     <motion.div
       key='preview'

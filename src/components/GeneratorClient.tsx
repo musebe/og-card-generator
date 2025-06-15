@@ -1,3 +1,5 @@
+// src/components/GeneratorClient.tsx
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -16,24 +18,26 @@ type Step = 'asset' | 'design' | 'preview';
 
 /**
  * 🎛️ **GeneratorClient** – 3-step wizard (client-only):
- * 1️⃣ AssetStep   – upload or fetch image
- * 2️⃣ DesignStep  – pick template & live preview
- * 3️⃣ PreviewStep – render final OG & export
  */
 export default function GeneratorClient() {
   const params = useSearchParams();
 
-  // Safely derive a TemplateId from the query, defaulting to 'basic'
+  // ✅ FIX: The default template is now 'article', which exists in our new templates.ts
   const raw = params.get('template');
   const initialTemplate: TemplateId = templates.some((t) => t.id === raw)
     ? (raw as TemplateId)
-    : 'basic';
+    : 'article';
 
   const [step, setStep] = useState<Step>('asset');
   const [templateId, setTemplateId] = useState<TemplateId>(initialTemplate);
   const [uploadedInfo, setUploadedInfo] = useState<UploadInfo | null>(null);
   const [ogData, setOgData] = useState<OgInfo>({});
-  const [fields, setFields] = useState({ title: '', subtitle: '' });
+
+  // ✅ FIX: Initialize with default text for a better user experience.
+  const [fields, setFields] = useState({
+    title: 'High-Performance Image & Video Delivery',
+    subtitle: 'Get the power of Cloudinary in your Next.js project',
+  });
 
   // Keep the `?template=` param in sync
   useEffect(() => {
@@ -42,17 +46,29 @@ export default function GeneratorClient() {
     window.history.replaceState(null, '', u);
   }, [templateId]);
 
-  // publicId (for CldImage builders) & fallbackUrl (for previews)
+  // Seed title/sub when OG metadata arrives from fetching a URL
+  useEffect(() => {
+    if (ogData.title || ogData.description) {
+      setFields({
+        title: ogData.title || '',
+        subtitle: ogData.description || '',
+      });
+    }
+  }, [ogData]);
+
+  // ✅ FIX: Use a robust handler to reset state on new uploads.
+  const handleUpload = (info: UploadInfo | null) => {
+    setUploadedInfo(info);
+    setOgData({}); // Clear any old fetched data
+    // Set default fields when a new image is uploaded
+    setFields({
+      title: 'High-Performance Image & Video Delivery',
+      subtitle: 'Get the power of Cloudinary in your Next.js project',
+    });
+  };
+
   const publicId = uploadedInfo?.publicId;
   const fallbackUrl = uploadedInfo?.url || ogData.image || '';
-
-  // Seed title/sub when OG metadata arrives
-  useEffect(() => {
-    setFields({
-      title: ogData.title || '',
-      subtitle: ogData.description || '',
-    });
-  }, [ogData]);
 
   return (
     <div className='container mx-auto max-w-screen-lg px-4 py-8 overflow-y-auto'>
@@ -60,7 +76,7 @@ export default function GeneratorClient() {
         {step === 'asset' && (
           <AssetStep
             imageUrl={fallbackUrl}
-            onUpload={setUploadedInfo}
+            onUpload={handleUpload} // <-- Use the new handler
             onFetch={setOgData}
             onNext={() => setStep('design')}
             disabledNext={!fallbackUrl}

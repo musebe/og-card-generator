@@ -2,13 +2,13 @@
 'use client';
 
 import { FC, useMemo, useState } from 'react';
-import { basicOgUrl, splitOgUrl, badgeOgUrl } from '@/lib/ogTemplates';
+import { articleOgUrl, fullOgUrl, oneThirdOgUrl } from '@/lib/ogTemplates';
 import type { TemplateId } from '@/lib/templates';
 
 interface CardPreviewProps {
-  templateId: TemplateId; // 'basic' | 'split' | 'badge'
+  templateId: TemplateId;
   config: {
-    image?: string; // publicId   OR https URL
+    image?: string;
     text?: { title?: string; subtitle?: string };
   };
 }
@@ -16,19 +16,12 @@ interface CardPreviewProps {
 const CardPreview: FC<CardPreviewProps> = ({ templateId, config }) => {
   const [errored, setErrored] = useState(false);
 
-  /* ------------------------------------------------------------------ *
-   * 1.  Show a grey skeleton until the user has either uploaded or     *
-   *     pasted an image                                                *
-   * ------------------------------------------------------------------ */
   if (!config.image) {
     return <div className='h-44 bg-gray-200 animate-pulse rounded-lg' />;
   }
 
-  /* ------------------------------------------------------------------ *
-   * 2.  If the asset is an arbitrary HTTPS URL, keep using the simple  *
-   *     CSS-overlay fallback                                           *
-   * ------------------------------------------------------------------ */
   if (/^https?:\/\//.test(config.image)) {
+    // This fallback logic for pasted URLs remains the same
     return (
       <div className='relative w-full max-w-md overflow-hidden rounded-lg shadow-lg'>
         <img
@@ -51,33 +44,30 @@ const CardPreview: FC<CardPreviewProps> = ({ templateId, config }) => {
     );
   }
 
-  /* ------------------------------------------------------------------ *
-   * 3.  Build the final Cloudinary OG-image URL for a **publicId**      *
-   * ------------------------------------------------------------------ */
   const finalUrl = useMemo(() => {
     try {
-      const publicId = config.image!; // we know it exists here
-      const headline = config.text?.title || '';
-      const body = config.text?.subtitle || '';
+      const publicId = config.image!;
+      const headline = config.text?.title || 'Your Headline Here';
+      const body = config.text?.subtitle || 'Your subtitle or body text here';
 
+      // ✅ This switch statement now calls your new template functions
       switch (templateId) {
-        case 'split':
-          return splitOgUrl({ publicId, headline, body });
+        case 'full':
+          return fullOgUrl({ publicId, headline, body });
 
-        case 'badge':
-          return badgeOgUrl({ publicId, headline, body });
+        case 'one-third':
+          return oneThirdOgUrl({ publicId, headline, body });
 
-        /* basic (and default fall-through) */
-        default: {
-          const logoPublicId =
-            process.env.NEXT_PUBLIC_CLOUDINARY_LOGO_PUBLIC_ID || '';
-          return basicOgUrl({
+        case 'article':
+        default:
+          // The logo public ID can be hardcoded or come from an env variable
+          const logoPublicId = 'images/cloudinary-logo-white';
+          return articleOgUrl({
             publicId,
             headline,
             tagline: body,
             logoPublicId,
           });
-        }
       }
     } catch (err) {
       console.error('OG URL generation failed:', err);
@@ -86,9 +76,6 @@ const CardPreview: FC<CardPreviewProps> = ({ templateId, config }) => {
     }
   }, [templateId, config.image, config.text?.title, config.text?.subtitle]);
 
-  /* ------------------------------------------------------------------ *
-   * 4.  Show an error banner if something went wrong                   *
-   * ------------------------------------------------------------------ */
   if (errored || !finalUrl) {
     return (
       <div className='p-4 bg-red-100 text-red-800 rounded'>
@@ -97,10 +84,6 @@ const CardPreview: FC<CardPreviewProps> = ({ templateId, config }) => {
     );
   }
 
-  /* ------------------------------------------------------------------ *
-   * 5.  Render the **finished** URL with a plain <img>. Nothing else   *
-   *     is added, so the Cloudinary overlays appear exactly as coded   *
-   * ------------------------------------------------------------------ */
   return (
     <div className='w-full overflow-hidden rounded-lg shadow-lg'>
       <img
