@@ -1,5 +1,47 @@
 [
   {
+    "id": "57a6b67f-4f0c-46d5-9a48-683f27f522aa",
+    "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/b_rgb:010A44/co_rgb:2A005F,e_colorize:100/e_gradient_fade:symmetric/l_hackit_africa:social_cards:gdukcxbf2fq1avxdwpss,w_1200,h_630,c_fill,o_20/fl_layer_apply,fl_no_overflow/l_text:Merriweather_58_bold_line_spacing_10:Dynamic%20Open%20Graph%20Generator%20with%20Cloudinary,w_1000,c_fit,co_white/fl_layer_apply,fl_no_overflow,x_100,y_100,g_north_west/l_hackit_africa:social_cards:galaxy,w_1000,h_2,e_colorize:100,co_white,o_70/fl_layer_apply,fl_no_overflow,x_100,y_175,g_south_west/l_hackit_africa:social_cards:logo,w_60,c_fit/fl_layer_apply,fl_no_overflow,x_100,y_102,g_south_west/l_text:Lato_37_bold:Generate%20real-time%20Open%20Graph%20images%20with%20Cloudinary,co_white/fl_layer_apply,fl_no_overflow,x_180,y_100,g_south_west/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/galaxy?_a=BAVAZGE70",
+    "headline": "Dynamic Open Graph Generator with Cloudinary",
+    "tagline": "Generate real-time Open Graph images with Cloudinary"
+  },
+  {
+    "id": "9430badf-2cdc-48b5-923f-2e3d217225d6",
+    "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/e_colorize:100,co_white/l_hackit_africa:social_cards:gdukcxbf2fq1avxdwpss,c_fill,g_auto,w_0.65,h_1.0,fl_relative/fl_layer_apply,fl_no_overflow,g_east/l_text:Source%20Sans%20Pro_50_bold_line_spacing_-10:Dynamic%20Open%20Graph%20Generator%20with%20Cloudinary,w_380,c_fit,co_black/fl_layer_apply,fl_no_overflow,g_west,x_40,y_-60/l_text:Source%20Sans%20Pro_29_line_spacing_5:Generate%20real-time%20Open%20Graph%20images%20with%20Cloudinary,w_380,c_fit,co_rgb:6b7280/fl_layer_apply,fl_no_overflow,g_west,x_40,y_80/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/gdukcxbf2fq1avxdwpss?_a=BAVAZGE70",
+    "headline": "Dynamic Open Graph Generator with Cloudinary",
+    "tagline": "Generate real-time Open Graph images with Cloudinary"
+  },
+  {
+    "id": "36638650-3182-48b3-8c36-24e47b754b5c",
+    "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/e_colorize:100,co_white/l_hackit_africa:social_cards:cbn0zuj9ikjickpcmgwq,c_fill,g_auto,w_0.65,h_1.0,fl_relative/fl_layer_apply,fl_no_overflow,g_east/l_text:Source%20Sans%20Pro_50_bold_line_spacing_-10:Design%20That%20Tells%20a%20Story,w_380,c_fit,co_black/fl_layer_apply,fl_no_overflow,g_west,x_40,y_-60/l_text:Source%20Sans%20Pro_29_line_spacing_5:How%20to%20Make%20Every%20Visual%20Speak%20With%20Purpose,w_380,c_fit,co_rgb:6b7280/fl_layer_apply,fl_no_overflow,g_west,x_40,y_80/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/cbn0zuj9ikjickpcmgwq?_a=BAVAZGE70",
+    "headline": "Design That Tells a Story",
+    "tagline": "How to Make Every Visual Speak With Purpose"
+  },
+  {
+    "id": "108a43ac-9df7-4aae-a105-7c5bf139234c",
+    "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/e_colorize:80,co_black/l_text:Source%20Sans%20Pro_80_bold_center:From%20Burnout%20to%20Balance,w_900,c_fit,co_white/fl_layer_apply,fl_no_overflow,y_-50/l_text:Source%20Sans%20Pro_42_center:A%20Realistic%20Guide%20to%20Recharging%20Your%20Energy,w_900,c_fit,co_white/fl_layer_apply,fl_no_overflow,y_80/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/ygctnabwlon2sivebsq1?_a=BAVAZGE70",
+    "headline": "From Burnout to Balance",
+    "tagline": "A Realistic Guide to Recharging Your Energy"
+  },
+  {
+    "id": "2b7024c4-a14a-4c4f-8bff-7ffbcc49e6df",
+    "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/e_colorize:100,co_white/l_hackit_africa:social_cards:sldr9gt0l1gvicwricfk,c_fill,g_auto,w_0.65,h_1.0,fl_relative/fl_layer_apply,fl_no_overflow,g_east/l_text:Source%20Sans%20Pro_50_bold_line_spacing_-10:Create%20Like%20a%20Pro,w_380,c_fit,co_black/fl_layer_apply,fl_no_overflow,g_west,x_40,y_-60/l_text:Source%20Sans%20Pro_29_line_spacing_5:Essential%20Tools%20Every%20Modern%20Creator%20Should%20Know,w_380,c_fit,co_rgb:6b7280/fl_layer_apply,fl_no_overflow,g_west,x_40,y_80/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/sldr9gt0l1gvicwricfk?_a=BAVAZGE70",
+    "headline": "Create Like a Pro",
+    "tagline": "Essential Tools Every Modern Creator Should Know"
+  },
+  {
+    "id": "46728174-c6aa-41ad-a3c9-bb5481c63d1d",
+    "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/e_colorize:80,co_black/l_text:Source%20Sans%20Pro_80_bold_center:Master%20Your%20Mornings,w_900,c_fit,co_white/fl_layer_apply,fl_no_overflow,y_-50/l_text:Source%20Sans%20Pro_42_center:Simple%20Habits%20That%20Set%20You%20Up%20for%20Daily%20Success,w_900,c_fit,co_white/fl_layer_apply,fl_no_overflow,y_80/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/uz98xvtjalmw1qp95mdg?_a=BAVAZGE70",
+    "headline": "Master Your Mornings",
+    "tagline": "Simple Habits That Set You Up for Daily Success"
+  },
+  {
+    "id": "7203671e-782d-4902-be24-ccabf010ce2a",
+    "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/b_rgb:010A44/co_rgb:2A005F,e_colorize:100/e_gradient_fade:symmetric/l_hackit_africa:social_cards:hmskbrycj0koihkeyjbw,w_1200,h_630,c_fill,o_20/fl_layer_apply,fl_no_overflow/l_text:Merriweather_58_bold_line_spacing_10:Content%20Strategies%20That%20Work%20in%202025,w_1000,c_fit,co_white/fl_layer_apply,fl_no_overflow,x_100,y_100,g_north_west/l_hackit_africa:social_cards:galaxy,w_1000,h_2,e_colorize:100,co_white,o_70/fl_layer_apply,fl_no_overflow,x_100,y_175,g_south_west/l_hackit_africa:social_cards:logo,w_60,c_fit/fl_layer_apply,fl_no_overflow,x_100,y_102,g_south_west/l_text:Lato_37_bold:Engage%20smarter%20with%20SEO%20and%20AI-driven%20tools,co_white/fl_layer_apply,fl_no_overflow,x_180,y_100,g_south_west/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/galaxy?_a=BAVAZGE70",
+    "headline": "Content Strategies That Work in 2025",
+    "tagline": "Engage smarter with SEO and AI-driven tools"
+  },
+  {
     "id": "af7ee15e-f43f-4fa9-a14c-acaf3d6a4898",
     "url": "https://res.cloudinary.com/hackit-africa/image/upload/c_fill,w_1200,h_630,g_center/e_colorize:80,co_black/l_text:Source%20Sans%20Pro_80_bold_center:Ignite%20Your%20Creative%20Spark,w_900,c_fit,co_white/fl_layer_apply,fl_no_overflow,y_-50/l_text:Source%20Sans%20Pro_42_center:A%20Practical%20Guide%20to%20Breaking%20Through%20Creative%20Blocks%252E,w_900,c_fit,co_white/fl_layer_apply,fl_no_overflow,y_80/c_limit,w_1200/f_jpg/q_auto/v1/hackit_africa/social_cards/lsgg4zex9ux3aeiz3hnh?_a=BAVAZGE70",
     "headline": "Ignite Your Creative Spark",
